@@ -13,6 +13,16 @@ same per-build type tables as the Python original, and produces the same structu
   and reports `protocol.ErrTruncated`, so live overlays can poll the temporary replay directory.
 - Verified against heroprotocol output byte for byte on real replays (see Testing).
 
+## Battle lobby
+
+`replay.server.battlelobby` is not covered by heroprotocol. `Replay.BattleLobby()` decodes its player
+section: full battletags, account levels, party membership (players of one party share `Party`),
+silence penalties and active boosts. The section is located by the lobby random seed
+(`m_randomValue` in init data) and validated while decoding, so the variable-layout parts before it are
+skipped. The player section layout follows
+[Heroes.StormReplayParser](https://github.com/HeroesToolChest/Heroes.StormReplayParser) (MIT).
+Supported for builds 69947 and newer; `TestBattleLobby` checks it against `replay.details`.
+
 ## Usage
 
 ```go
@@ -61,7 +71,7 @@ stormreplay game    match.StormReplay
 stormreplay details match.StormReplay
 ```
 
-Sections: `info`, `header`, `details`, `initdata`, `attributes`, `tracker`, `game`, `message`.
+Sections: `info`, `header`, `details`, `initdata`, `attributes`, `lobby`, `tracker`, `game`, `message`.
 
 ## Testing
 

@@ -19,7 +19,7 @@ import (
 
 func main() {
 	if len(os.Args) != 3 {
-		fmt.Fprintln(os.Stderr, "usage: stormreplay <header|details|initdata|attributes|tracker|game|message|info> <file.StormReplay>")
+		fmt.Fprintln(os.Stderr, "usage: stormreplay <header|details|initdata|attributes|lobby|tracker|game|message|info> <file.StormReplay>")
 		os.Exit(2)
 	}
 	if err := run(os.Args[1], os.Args[2]); err != nil {
@@ -58,6 +58,12 @@ func run(section, path string) error {
 			return err
 		}
 		return emit(v)
+	case "lobby":
+		v, err := r.BattleLobby()
+		if err != nil {
+			return err
+		}
+		return enc.Encode(v)
 	case "attributes":
 		v, err := r.Attributes()
 		if err != nil {
