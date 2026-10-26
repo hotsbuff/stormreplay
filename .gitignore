@@ -1,0 +1,4 @@
+bin/
+*.StormReplay
+*.StormSave
+testdata/private/
